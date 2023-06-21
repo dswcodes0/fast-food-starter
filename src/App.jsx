@@ -1,8 +1,11 @@
 // IMPORT ANY NEEDED COMPONENTS HERE
+import { useState } from "react"
 import { Dataset } from "./data/dataset"
 import "./App.css"
+import Header from "./components/Header/Header"
+import Instructions from "./components/Instructions/Instructions"
+import Chip from "./components/Chip/Chip"
 
-// don't move this!
 export const appInfo = {
   title: `Fast Food Feud 🍔!`,
   tagline: `Folks' Favorite Friendly Fuel Finder For Food Facts`,
@@ -20,6 +23,21 @@ export const appInfo = {
 
 export function App() {
   const { data, categories, restaurants } = Dataset.createDataSet()
+  const [selectedState, setSelectedState] = useState("")
+  const [selectedRestaurant, setSelectedRestaurant] = useState("") // Corrected spelling
+  const [selectedData, setSelectedData] = useState(null)
+  const [selectedCategory, setSelectedCategory] = useState(null)
+  const [selectedRestaurants, setSelectedRestaurants] = useState(null) // Corrected spelling
+
+  const currentMenuItems = data.filter( (item) =>{
+    if (item.food_category === selectedCategory && item.restaurant === selectedRestaurant){
+      return true
+    }else{
+      return false
+    }
+  }
+  )
+  
 
   return (
     <main className="App">
@@ -28,26 +46,61 @@ export function App() {
         <div className="categories options">
           <h2 className="title">Categories</h2>
           {/* YOUR CODE HERE */}
+          {categories.map((category) => {
+            let isChipActive;
+            if (category === selectedCategory) {
+              isChipActive = true;
+            } else {
+              isChipActive = false;
+            }
+            return (
+              <Chip
+                key={category}
+                label={category}
+                isActive={isChipActive}
+                chipClick={() => setSelectedCategory(category)}
+              />
+            );
+          })}
         </div>
       </div>
 
       {/* MAIN COLUMN */}
       <div className="container">
         {/* HEADER GOES HERE */}
+        <Header title={appInfo.title} tagline={appInfo.tagline} description={appInfo.description} />
 
         {/* RESTAURANTS ROW */}
         <div className="RestaurantsRow">
           <h2 className="title">Restaurants</h2>
-          <div className="restaurants options">{/* YOUR CODE HERE */}</div>
+          <div className="restaurants options">
+            {
+              restaurants.map((restaurant) => {
+
+              
+                let isChipActive
+                if (restaurant === selectedRestaurant){
+                  isChipActive = true
+                }else {
+                  isChipActive = false
+                }
+                return(<Chip key= {restaurant} 
+                      label={restaurant} 
+                      isActive={isChipActive} 
+                      chipClick={() => setSelectedRestaurant(restaurant)}/>
+              )})}
+                    </div>
         </div>
 
         {/* INSTRUCTIONS GO HERE */}
-
+        <Instructions instructions={appInfo.instructions.start} />
         {/* MENU DISPLAY */}
         <div className="MenuDisplay display">
           <div className="MenuItemButtons menu-items">
             <h2 className="title">Menu Items</h2>
-            {/* YOUR CODE HERE */}
+            {
+             
+            }
           </div>
 
           {/* NUTRITION FACTS */}
