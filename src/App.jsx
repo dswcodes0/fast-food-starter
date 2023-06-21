@@ -28,6 +28,7 @@ export function App() {
   const [selectedData, setSelectedData] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [selectedRestaurants, setSelectedRestaurants] = useState(null) // Corrected spelling
+  const [selectedMenuItem, setSelectedMenuItem] = useState(null)
 
   const currentMenuItems = data.filter( (item) =>{
     if (item.food_category === selectedCategory && item.restaurant === selectedRestaurant){
@@ -37,7 +38,7 @@ export function App() {
     }
   }
   )
-  
+  console.log(currentMenuItems)
 
   return (
     <main className="App">
@@ -99,7 +100,13 @@ export function App() {
           <div className="MenuItemButtons menu-items">
             <h2 className="title">Menu Items</h2>
             {
-             
+             currentMenuItems.map((menuItem) => {
+              return (<Chip 
+              key={menuItem.item_description}
+              label={menuItem.item_name}
+              isActive={selectedMenuItem === menuItem.id}
+              chipClick={() => setSelectedMenuItem(menuItem.id)}/>)
+             })
             }
           </div>
 
